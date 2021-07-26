@@ -35,7 +35,8 @@ app.set('view engine', 'ejs');
 
 // ## Agrega el middleware de express para que el servidor soporte json ##
 
-app.use(express.urlencoded({extended:false}));
+//app.use(express.urlencoded({extended:false}));
+app.use(express.json());
 
 /* ############## RUTAS ################  */
 
@@ -62,6 +63,7 @@ res.render('pages/all-pets', {title: 'All', animals: animals})
 app.post('/api/addAnimal', (req,res) => {
   var newAnimal = req.body;
   animals.push(newAnimal);
+  res.json(newAnimal);
 
 })
  
@@ -89,19 +91,17 @@ app.get('/dog', (req,res) => {
 
 app.get('/api/getAnimal/:animal', (req,res) => {
 
-  var _title = req.params.title;
-  var _animal = req.params.animal;
-  var response;
 
-  for(var i = 0; i++ < animals.length; i++){
+  var _animal = req.params.animal;
+  var found;
+
+  for(var i = 0; i < animals.length; i++){
     if(_animal === animals[i].animalType){
-     return res.json(animals[i]);
-    } else if (_animal === !animals[i].animalType){
-      return res.json(animals[i]);
-    }
+     found = animals[i];
+     }
   } 
 
-  res.render('pages/any', {title: _title, animal: _animal})
+  res.render('pages/any', {title: _animal, animal: found})
 
 })
    
